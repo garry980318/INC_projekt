@@ -227,13 +227,13 @@ begin
    -- - - - - - - - - - - - - - - - - - - - - - -
    when FAIL =>
       next_state <= FAIL;
-      if (CNT_OF = '1') then
+      if (KEY(15) = '1') then
          next_state <= NO_ACCESS;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
    when NO_ACCESS =>
       next_state <= NO_ACCESS;
-      if (KEY(15) = '1') then
+      if (CNT_OF = '1') then
         next_state <= FINISH;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
