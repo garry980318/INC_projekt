@@ -28,7 +28,7 @@ end entity fsm;
 --                      Architecture declaration
 -- ----------------------------------------------------------------------------
 architecture behavioral of fsm is
-   type t_state is (K12T1, K12T2, K1T3, K2T3, K12T4, K12T5, K1T6, K2T6, K1T7, K2T7, K1T8, K2T8, K1T9, K2T9, K1T10, K2T10, K12T11, SUCCESS, FAIL, NO_ACCESS, FINISH);
+   type t_state is (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, ACCESS_OK, FAIL, NO_ACCESS, FINISH);
    signal present_state, next_state : t_state;
 
 begin
@@ -36,7 +36,7 @@ begin
 sync_logic : process(RESET, CLK)
 begin
    if (RESET = '1') then
-      present_state <= K12T1;
+      present_state <= T1;
    elsif (CLK'event AND CLK = '1') then
       present_state <= next_state;
    end if;
@@ -44,183 +44,138 @@ end process sync_logic;
 
 -- -------------------------------------------------------
 next_state_logic : process(present_state, KEY, CNT_OF)
+variable KOD : integer;
 begin
    case (present_state) is
    -- - - - - - - - - - - - - - - - - - - - - - -
-   when K12T1 =>
-      next_state <= K12T1;
+   when T1 =>
+      next_state <= T1;
       if (KEY(1) = '1') then
-         next_state <= K12T2;
+         next_state <= T2;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
       elsif (KEY(14 downto 0) /= "000000000000000") then
          next_state <= FAIL;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
-   when K12T2 =>
-      next_state <= K12T2;
+   when T2 =>
+      next_state <= T2;
       if (KEY(1) = '1') then
-         next_state <= K1T3;
+         KOD := 1;
+         next_state <= T3;
       elsif (KEY(3) = '1') then
-         next_state <= K2T3;
+         KOD := 2;
+         next_state <= T3;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
       elsif (KEY(14 downto 0) /= "000000000000000") then
          next_state <= FAIL;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
-   when K1T3 =>
-      next_state <= K1T3;
-      if (KEY(5) = '1') then
-         next_state <= K12T4;
+   when T3 =>
+      next_state <= T3;
+      if (KEY(5) = '1') and (KOD = 1) then
+         next_state <= T4;
+     elsif (KEY(0) = '1') and (KOD = 2) then
+         next_state <= T4;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
       elsif (KEY(14 downto 0) /= "000000000000000") then
          next_state <= FAIL;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
-   when K2T3 =>
-      next_state <= K2T3;
+   when T4 =>
+      next_state <= T4;
       if (KEY(0) = '1') then
-         next_state <= K12T4;
+         next_state <= T5;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
       elsif (KEY(14 downto 0) /= "000000000000000") then
          next_state <= FAIL;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
-   when K12T4 =>
-      next_state <= K12T4;
-      if (KEY(0) = '1') then
-         next_state <= K12T5;
+   when T5 =>
+      next_state <= T5;
+      if (KEY(1) = '1') and (KOD = 1) then
+         next_state <= T6;
+      elsif (KEY(2) = '1') and (KOD = 2) then
+         next_state <= T6;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
       elsif (KEY(14 downto 0) /= "000000000000000") then
          next_state <= FAIL;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
-   when K12T5 =>
-      next_state <= K12T5;
-      if (KEY(1) = '1') then
-         next_state <= K1T6;
-      elsif (KEY(2) = '1') then
-         next_state <= K2T6;
+   when T6 =>
+      next_state <= T6;
+      if (KEY(3) = '1') and (KOD = 1) then
+         next_state <= T7;
+      elsif (KEY(7) = '1') and (KOD = 2) then
+         next_state <= T7;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
       elsif (KEY(14 downto 0) /= "000000000000000") then
          next_state <= FAIL;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
-   when K1T6 =>
-      next_state <= K1T6;
-      if (KEY(3) = '1') then
-         next_state <= K1T7;
+   when T7 =>
+      next_state <= T7;
+      if (KEY(9) = '1') and (KOD = 1) then
+         next_state <= T8;
+     elsif (KEY(8) = '1') and (KOD = 2) then
+         next_state <= T8;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
       elsif (KEY(14 downto 0) /= "000000000000000") then
          next_state <= FAIL;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
-   when K2T6 =>
-      next_state <= K2T6;
-      if (KEY(7) = '1') then
-         next_state <= K2T7;
+   when T8 =>
+      next_state <= T8;
+      if (KEY(2) = '1') and (KOD = 1) then
+         next_state <= T9;
+     elsif (KEY(4) = '1') and (KOD = 2) then
+         next_state <= T9;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
       elsif (KEY(14 downto 0) /= "000000000000000") then
          next_state <= FAIL;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
-   when K1T7 =>
-      next_state <= K1T7;
-      if (KEY(9) = '1') then
-         next_state <= K1T8;
+   when T9 =>
+      next_state <= T9;
+      if (KEY(3) = '1') and (KOD = 1) then
+         next_state <= T10;
+     elsif (KEY(6) = '1') and (KOD = 2) then
+         next_state <= T10;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
       elsif (KEY(14 downto 0) /= "000000000000000") then
          next_state <= FAIL;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
-   when K2T7 =>
-      next_state <= K2T7;
-      if (KEY(8) = '1') then
-         next_state <= K2T8;
+   when T10 =>
+      next_state <= T10;
+      if (KEY(0) = '1') and (KOD = 1) then
+         next_state <= T11;
+     elsif (KEY(1) = '1') and (KOD = 2) then
+         next_state <= T11;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
       elsif (KEY(14 downto 0) /= "000000000000000") then
          next_state <= FAIL;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
-   when K1T8 =>
-      next_state <= K1T8;
-      if (KEY(2) = '1') then
-         next_state <= K1T9;
-      elsif (KEY(15) = '1') then
-         next_state <= NO_ACCESS;
-      elsif (KEY(14 downto 0) /= "000000000000000") then
-         next_state <= FAIL;
-      end if;
-   -- - - - - - - - - - - - - - - - - - - - - - -
-   when K2T8 =>
-      next_state <= K2T8;
-      if (KEY(4) = '1') then
-         next_state <= K2T9;
-      elsif (KEY(15) = '1') then
-         next_state <= NO_ACCESS;
-      elsif (KEY(14 downto 0) /= "000000000000000") then
-         next_state <= FAIL;
-      end if;
-   -- - - - - - - - - - - - - - - - - - - - - - -
-   when K1T9 =>
-      next_state <= K1T9;
-      if (KEY(3) = '1') then
-         next_state <= K1T10;
-      elsif (KEY(15) = '1') then
-         next_state <= NO_ACCESS;
-      elsif (KEY(14 downto 0) /= "000000000000000") then
-         next_state <= FAIL;
-      end if;
-   -- - - - - - - - - - - - - - - - - - - - - - -
-   when K2T9 =>
-      next_state <= K2T9;
-      if (KEY(6) = '1') then
-         next_state <= K2T10;
-      elsif (KEY(15) = '1') then
-         next_state <= NO_ACCESS;
-      elsif (KEY(14 downto 0) /= "000000000000000") then
-         next_state <= FAIL;
-      end if;
-   -- - - - - - - - - - - - - - - - - - - - - - -
-   when K1T10 =>
-      next_state <= K1T10;
-      if (KEY(0) = '1') then
-         next_state <= K12T11;
-      elsif (KEY(15) = '1') then
-         next_state <= NO_ACCESS;
-      elsif (KEY(14 downto 0) /= "000000000000000") then
-         next_state <= FAIL;
-      end if;
-   -- - - - - - - - - - - - - - - - - - - - - - -
-   when K2T10 =>
-      next_state <= K2T10;
-      if (KEY(1) = '1') then
-         next_state <= K12T11;
-      elsif (KEY(15) = '1') then
-         next_state <= NO_ACCESS;
-      elsif (KEY(14 downto 0) /= "000000000000000") then
-         next_state <= FAIL;
-      end if;
-   -- - - - - - - - - - - - - - - - - - - - - - -
-   when K12T11 =>
-      next_state <= K12T11;
+   when T11 =>
+      next_state <= T11;
       if (KEY(15) = '1') then
-         next_state <= SUCCESS;
+         next_state <= ACCESS_OK;
       elsif (KEY(14 downto 0) /= "000000000000000") then
          next_state <= FAIL;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
-   when SUCCESS =>
-      next_state <= SUCCESS;
+   when ACCESS_OK =>
+      next_state <= ACCESS_OK;
       if (CNT_OF = '1') then
          next_state <= FINISH;
       end if;
@@ -240,11 +195,11 @@ begin
    when FINISH =>
       next_state <= FINISH;
       if (KEY(15) = '1') then
-         next_state <= K12T1;
+         next_state <= T1;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
    when others =>
-      next_state <= K12T1;
+      next_state <= T1;
    end case;
 end process next_state_logic;
 
@@ -259,7 +214,7 @@ begin
 
    case (present_state) is
    -- - - - - - - - - - - - - - - - - - - - - - -
-   when SUCCESS =>
+   when ACCESS_OK =>
       FSM_CNT_CE     <= '1';
       FSM_MX_LCD     <= '1';
       FSM_LCD_WR     <= '1';
