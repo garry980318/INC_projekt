@@ -50,7 +50,7 @@ begin
    when K12T1 =>
       next_state <= K12T1;
       if (KEY(1) = '1') then
-         next_state <= K12T2
+         next_state <= K12T2;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
       elsif (KEY(14 downto 0) /= "000000000000000") then
