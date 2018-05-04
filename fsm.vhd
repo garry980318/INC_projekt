@@ -228,13 +228,13 @@ begin
    when FAIL =>
       next_state <= FAIL;
       if (CNT_OF = '1') then
-         next_state <= FINISH;
+         next_state <= NO_ACCESS;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
    when NO_ACCESS =>
       next_state <= NO_ACCESS;
       if (KEY(15) = '1') then
-        next_state <= FAIL;
+        next_state <= FINISH;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
    when FINISH =>
@@ -259,25 +259,16 @@ begin
 
    case (present_state) is
    -- - - - - - - - - - - - - - - - - - - - - - -
-   when K12T1 =>
-      if (KEY(14 downto 0) /= "000000000000000") then
-         FSM_LCD_WR     <= '1';
-      end if;
-      if (KEY(15) = '1') then
-         FSM_LCD_CLR    <= '1';
-      end if;
-   -- - - - - - - - - - - - - - - - - - - - - - -
    when SUCCESS =>
       FSM_CNT_CE     <= '1';
       FSM_MX_LCD     <= '1';
       FSM_LCD_WR     <= '1';
       FSM_MX_MEM     <= '1';
    -- - - - - - - - - - - - - - - - - - - - - - -
-   when FAIL =>
+   when NO_ACCESS =>
       FSM_CNT_CE     <= '1';
       FSM_MX_LCD     <= '1';
       FSM_LCD_WR     <= '1';
-      FSM_MX_MEM     <= '0';
    -- - - - - - - - - - - - - - - - - - - - - - -
    when FINISH =>
       if (KEY(15) = '1') then
@@ -285,6 +276,13 @@ begin
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
    when others =>
+      if (KEY(14 downto 0) /= "000000000000000") then
+         FSM_LCD_WR     <= '1';
+      end if;
+      if (KEY(15) = '1') then
+         FSM_LCD_CLR    <= '1';
+      end if;
+   -- - - - - - - - - - - - - - - - - - - - - - -
    end case;
 end process output_logic;
 
