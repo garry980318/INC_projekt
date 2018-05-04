@@ -47,10 +47,88 @@ next_state_logic : process(present_state, KEY, CNT_OF)
 begin
    case (present_state) is
    -- - - - - - - - - - - - - - - - - - - - - - -
-   when TEST1 =>
-      next_state <= TEST1;
-      if (KEY(15) = '1') then
-         next_state <= PRINT_MESSAGE;
+   when K12T1 =>
+      next_state <= K12T1;
+      if (KEY(1) = '1') then
+         next_state <= K12T2
+      elsif (KEY(15) = '1') then
+         next_state <= NO_ACCESS;
+      elsif (KEY(14 downto 0) /= "000000000000000") then
+         next_state <= FAIL;
+      end if;
+   -- - - - - - - - - - - - - - - - - - - - - - -
+   when K12T2 =>
+      next_state <= K12T2;
+      if (KEY(1) = '1') then
+         next_state <= K1T3;
+      elsif (KEY(3) = '1') then
+         next_state <= K2T3;
+      elsif (KEY(15) = '1') then
+         next_state <= NO_ACCESS;
+      elsif (KEY(14 downto 0) /= "000000000000000") then
+         next_state <= FAIL;
+      end if;
+   -- - - - - - - - - - - - - - - - - - - - - - -
+   when K1T3 =>
+      next_state <= K1T3;
+      if (KEY(5) = '1') then
+         next_state <= K12T4;
+      elsif (KEY(15) = '1') then
+         next_state <= NO_ACCESS;
+      elsif (KEY(14 downto 0) /= "000000000000000") then
+         next_state <= FAIL;
+      end if;
+   -- - - - - - - - - - - - - - - - - - - - - - -
+   when K2T3 =>
+      next_state <= K2T3;
+      if (KEY(0) = '1') then
+         next_state <= K12T4;
+      elsif (KEY(15) = '1') then
+         next_state <= NO_ACCESS;
+      elsif (KEY(14 downto 0) /= "000000000000000") then
+         next_state <= FAIL;
+      end if;
+   -- - - - - - - - - - - - - - - - - - - - - - -
+   when K12T4 =>
+      next_state <= K12T4;
+      if (KEY(0) = '1') then
+         next_state <= K12T5;
+      elsif (KEY(15) = '1') then
+         next_state <= NO_ACCESS;
+      elsif (KEY(14 downto 0) /= "000000000000000") then
+         next_state <= FAIL;
+      end if;
+   -- - - - - - - - - - - - - - - - - - - - - - -
+   when K12T5 =>
+      next_state <= K12T5;
+      if (KEY(1) = '1') then
+         next_state <= K1T6;
+      elsif (KEY(2) = '1') then
+         next_state <= K2T6;
+      elsif (KEY(15) = '1') then
+         next_state <= NO_ACCESS;
+      elsif (KEY(14 downto 0) /= "000000000000000") then
+         next_state <= FAIL;
+      end if;
+   -- - - - - - - - - - - - - - - - - - - - - - -
+   when K1T6 =>
+      next_state <= K1T6;
+      if (KEY(3) = '1') then
+         next_state <= K1T7;
+      elsif (KEY(15) = '1') then
+         next_state <= NO_ACCESS;
+      elsif (KEY(14 downto 0) /= "000000000000000") then
+         next_state <= FAIL;
+      end if;
+   -- - - - - - - - - - - - - - - - - - - - - - -
+   when K2T6 =>
+      next_state <= K2T6;
+      if (KEY(7) = '1') then
+         next_state <= K2T7;
+      elsif (KEY(15) = '1') then
+         next_state <= NO_ACCESS;
+      elsif (KEY(14 downto 0) /= "000000000000000") then
+         next_state <= FAIL;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
    when PRINT_MESSAGE =>
