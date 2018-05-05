@@ -44,7 +44,7 @@ end process sync_logic;
 
 -- -------------------------------------------------------
 next_state_logic : process(present_state, KEY, CNT_OF)
-variable KOD : integer;
+variable KOD : boolean;
 begin
    case (present_state) is
    -- - - - - - - - - - - - - - - - - - - - - - -
@@ -61,10 +61,10 @@ begin
    when T2 =>
       next_state <= T2;
       if (KEY(1) = '1') then
-         KOD := 1;
+         KOD := true;
          next_state <= T3;
       elsif (KEY(3) = '1') then
-         KOD := 2;
+         KOD := false;
          next_state <= T3;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
@@ -74,9 +74,9 @@ begin
    -- - - - - - - - - - - - - - - - - - - - - - -
    when T3 =>
       next_state <= T3;
-      if (KEY(5) = '1') and (KOD = 1) then
+      if (KEY(5) = '1') and (KOD = true) then
          next_state <= T4;
-      elsif (KEY(0) = '1') and (KOD = 2) then
+      elsif (KEY(0) = '1') and (KOD = false) then
          next_state <= T4;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
@@ -96,9 +96,9 @@ begin
    -- - - - - - - - - - - - - - - - - - - - - - -
    when T5 =>
       next_state <= T5;
-      if (KEY(1) = '1') and (KOD = 1) then
+      if (KEY(1) = '1') and (KOD = true) then
          next_state <= T6;
-      elsif (KEY(2) = '1') and (KOD = 2) then
+      elsif (KEY(2) = '1') and (KOD = false) then
          next_state <= T6;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
@@ -108,9 +108,9 @@ begin
    -- - - - - - - - - - - - - - - - - - - - - - -
    when T6 =>
       next_state <= T6;
-      if (KEY(3) = '1') and (KOD = 1) then
+      if (KEY(3) = '1') and (KOD = true) then
          next_state <= T7;
-      elsif (KEY(7) = '1') and (KOD = 2) then
+      elsif (KEY(7) = '1') and (KOD = false) then
          next_state <= T7;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
@@ -120,9 +120,9 @@ begin
    -- - - - - - - - - - - - - - - - - - - - - - -
    when T7 =>
       next_state <= T7;
-      if (KEY(9) = '1') and (KOD = 1) then
+      if (KEY(9) = '1') and (KOD = true) then
          next_state <= T8;
-      elsif (KEY(8) = '1') and (KOD = 2) then
+      elsif (KEY(8) = '1') and (KOD = false) then
          next_state <= T8;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
@@ -132,9 +132,9 @@ begin
    -- - - - - - - - - - - - - - - - - - - - - - -
    when T8 =>
       next_state <= T8;
-      if (KEY(2) = '1') and (KOD = 1) then
+      if (KEY(2) = '1') and (KOD = true) then
          next_state <= T9;
-      elsif (KEY(4) = '1') and (KOD = 2) then
+      elsif (KEY(4) = '1') and (KOD = false) then
          next_state <= T9;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
@@ -144,9 +144,9 @@ begin
    -- - - - - - - - - - - - - - - - - - - - - - -
    when T9 =>
       next_state <= T9;
-      if (KEY(3) = '1') and (KOD = 1) then
+      if (KEY(3) = '1') and (KOD = true) then
          next_state <= T10;
-      elsif (KEY(6) = '1') and (KOD = 2) then
+      elsif (KEY(6) = '1') and (KOD = false) then
          next_state <= T10;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
@@ -156,9 +156,9 @@ begin
    -- - - - - - - - - - - - - - - - - - - - - - -
    when T10 =>
       next_state <= T10;
-      if (KEY(0) = '1') and (KOD = 1) then
+      if (KEY(0) = '1') and (KOD = true) then
          next_state <= T11;
-      elsif (KEY(1) = '1') and (KOD = 2) then
+      elsif (KEY(1) = '1') and (KOD = false) then
          next_state <= T11;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
