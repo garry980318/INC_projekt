@@ -28,7 +28,7 @@ end entity fsm;
 --                      Architecture declaration
 -- ----------------------------------------------------------------------------
 architecture behavioral of fsm is
-   type t_state is (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, ACCESS_OK, FAIL, NO_ACCESS, FINISH);
+   type t_state is (T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, ACCESS_OK, NO_ACCESS, FAIL, FINISH);
    signal present_state, next_state : t_state;
 
 begin
@@ -76,7 +76,7 @@ begin
       next_state <= T3;
       if (KEY(5) = '1') and (KOD = 1) then
          next_state <= T4;
-     elsif (KEY(0) = '1') and (KOD = 2) then
+      elsif (KEY(0) = '1') and (KOD = 2) then
          next_state <= T4;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
@@ -122,7 +122,7 @@ begin
       next_state <= T7;
       if (KEY(9) = '1') and (KOD = 1) then
          next_state <= T8;
-     elsif (KEY(8) = '1') and (KOD = 2) then
+      elsif (KEY(8) = '1') and (KOD = 2) then
          next_state <= T8;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
@@ -134,7 +134,7 @@ begin
       next_state <= T8;
       if (KEY(2) = '1') and (KOD = 1) then
          next_state <= T9;
-     elsif (KEY(4) = '1') and (KOD = 2) then
+      elsif (KEY(4) = '1') and (KOD = 2) then
          next_state <= T9;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
@@ -146,7 +146,7 @@ begin
       next_state <= T9;
       if (KEY(3) = '1') and (KOD = 1) then
          next_state <= T10;
-     elsif (KEY(6) = '1') and (KOD = 2) then
+      elsif (KEY(6) = '1') and (KOD = 2) then
          next_state <= T10;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
@@ -158,7 +158,7 @@ begin
       next_state <= T10;
       if (KEY(0) = '1') and (KOD = 1) then
          next_state <= T11;
-     elsif (KEY(1) = '1') and (KOD = 2) then
+      elsif (KEY(1) = '1') and (KOD = 2) then
          next_state <= T11;
       elsif (KEY(15) = '1') then
          next_state <= NO_ACCESS;
@@ -180,16 +180,16 @@ begin
          next_state <= FINISH;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
+   when NO_ACCESS =>
+      next_state <= NO_ACCESS;
+      if (CNT_OF = '1') then
+         next_state <= FINISH;
+      end if;
+   -- - - - - - - - - - - - - - - - - - - - - - -
    when FAIL =>
       next_state <= FAIL;
       if (KEY(15) = '1') then
          next_state <= NO_ACCESS;
-      end if;
-   -- - - - - - - - - - - - - - - - - - - - - - -
-   when NO_ACCESS =>
-      next_state <= NO_ACCESS;
-      if (CNT_OF = '1') then
-        next_state <= FINISH;
       end if;
    -- - - - - - - - - - - - - - - - - - - - - - -
    when FINISH =>
@@ -237,7 +237,6 @@ begin
       if (KEY(15) = '1') then
          FSM_LCD_CLR    <= '1';
       end if;
-   -- - - - - - - - - - - - - - - - - - - - - - -
    end case;
 end process output_logic;
 
